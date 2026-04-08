@@ -110,11 +110,12 @@ export default function Profile() {
   </h2>
 
   {user.badges?.length > 0 ? (
-    /* Changed to 5 columns to keep them small and looking like real medals */
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-      {user.badges.map((b, i) => (
-        <Badge key={i} badge={b} />
-      ))}
+      {user.badges
+        ?.filter((v, i, a) => a.findIndex(t => (t.badge?.name === v.badge?.name)) === i) // Filter duplicates in UI
+        .map((b, i) => (
+          <Badge key={i} badge={b} />
+        ))}
     </div>
   ) : (
     <div className="text-center py-16 bg-black/20 rounded-3xl border border-dashed border-white/10">
