@@ -1,7 +1,8 @@
 import axios from "axios";
 
+// 🔥 Use environment variable from Vercel, fallback to localhost for development
 const API = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
 });
 
 // Attach token
