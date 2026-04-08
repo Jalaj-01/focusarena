@@ -102,25 +102,27 @@ export default function Profile() {
           <StatCard title="Battles Lost" value={user.losses || 0} icon={<Swords className="text-red-400" />} />
         </div>
 
-        {/* 🔷 ACHIEVEMENTS (The "Medal Room") */}
-        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
-          <h2 className="text-xl font-black uppercase tracking-widest mb-8 flex items-center gap-3">
-            <Trophy className="text-yellow-500" /> Achievement Medals
-          </h2>
+        
+{/* 🔷 ACHIEVEMENTS (Update this section in your Profile.jsx) */}
+<div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
+  <h2 className="text-sm font-black uppercase tracking-[0.2em] mb-8 flex items-center gap-3 text-gray-400">
+    <Trophy size={18} className="text-yellow-500" /> Medal Collection
+  </h2>
 
-          {user.badges?.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-              {user.badges.map((b, i) => (
-                <Badge key={i} badge={b} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 bg-black/20 rounded-3xl border border-dashed border-white/10">
-              <Star size={40} className="mx-auto text-white/10 mb-4" />
-              <p className="text-gray-500 font-bold uppercase text-xs tracking-widest">No medals earned yet. Win a battle to start your collection!</p>
-            </div>
-          )}
-        </div>
+  {user.badges?.length > 0 ? (
+    /* Changed to 5 columns to keep them small and looking like real medals */
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      {user.badges.map((b, i) => (
+        <Badge key={i} badge={b} />
+      ))}
+    </div>
+  ) : (
+    <div className="text-center py-16 bg-black/20 rounded-3xl border border-dashed border-white/10">
+      <Star size={40} className="mx-auto text-white/10 mb-4" />
+      <p className="text-gray-500 font-bold uppercase text-[10px] tracking-widest">No medals earned yet.</p>
+    </div>
+  )}
+</div>
 
         {/* 🔷 BATTLE HISTORY */}
         <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">

@@ -1,13 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { UserBadge } from './user-badge.entity';
 
-@Entity()
+@Entity('badges')
 export class Badge {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   name: string;
 
   @Column()
   description: string;
+
+  @OneToMany(() => UserBadge, (userBadge) => userBadge.badge)
+  user_badges: UserBadge[];
 }

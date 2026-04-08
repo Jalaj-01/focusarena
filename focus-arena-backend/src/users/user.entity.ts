@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Participant } from '../participants/participant.entity';
+import { UserBadge } from '../badges/user-badge.entity';
 
 @Entity()
 export class User {
@@ -57,7 +58,10 @@ export class User {
   @Column({ default: 'user' })
   role: 'user' | 'admin';
 
-  // 🔥 ADDED THIS RELATIONSHIP
+  
   @OneToMany(() => Participant, (participant) => participant.user)
   participants: Participant[];
+
+   @OneToMany(() => UserBadge, (userBadge) => userBadge.user)
+  badges: UserBadge[];
 }

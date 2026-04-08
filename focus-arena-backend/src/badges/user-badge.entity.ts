@@ -1,15 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Badge } from './badge.entity';
 
-@Entity()
+@Entity('user_badges')
 export class UserBadge {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.badges)
   user: User;
 
-  @ManyToOne(() => Badge)
+  @ManyToOne(() => Badge, (badge) => badge.user_badges)
   badge: Badge;
+
+  @CreateDateColumn()
+  earned_at: Date;
 }
