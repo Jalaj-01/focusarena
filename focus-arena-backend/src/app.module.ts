@@ -22,13 +22,24 @@ import { ScheduleModule } from '@nestjs/schedule';
 
     TypeOrmModule.forRoot({
       type: 'postgres',
+      // 🔥 UPDATED: Support for single Connection URL (Production) 
+      // or individual variables (Local Development)
+      url: process.env.DATABASE_URL,
       host: process.env.DATABASE_HOST,
       port: Number(process.env.DATABASE_PORT) || 5432,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: true, // Keep true for now to auto-create tables on Neon
+      
+      // 🔥 SSL is REQUIRED for Neon and Render Database connections
+      ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
+      extra: process.env.DATABASE_URL ? {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      } : {},
     }),
 
     AuthModule,
