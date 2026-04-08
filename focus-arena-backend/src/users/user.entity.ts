@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Participant } from '../participants/participant.entity';
 
 @Entity()
 export class User {
@@ -54,4 +56,8 @@ export class User {
 
   @Column({ default: 'user' })
   role: 'user' | 'admin';
+
+  // 🔥 ADDED THIS RELATIONSHIP
+  @OneToMany(() => Participant, (participant) => participant.user)
+  participants: Participant[];
 }

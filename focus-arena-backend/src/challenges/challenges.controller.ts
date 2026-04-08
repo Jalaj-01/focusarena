@@ -135,4 +135,16 @@ export class ChallengesController {
   delete(@Param('id') id: string, @Request() req) {
     return this.challengesService.deleteChallenge(id, req.user.userId);
   }
+
+  // Add this inside ChallengesController class in src/challenges/challenges.controller.ts
+
+  @Delete(':id/participants/:participantId')
+  @UseGuards(JwtAuthGuard)
+  async kickParticipant(
+    @Param('id') id: string,
+    @Param('participantId') participantId: string,
+    @Request() req,
+  ) {
+    return this.challengesService.kickParticipant(id, participantId, req.user);
+  }
 }

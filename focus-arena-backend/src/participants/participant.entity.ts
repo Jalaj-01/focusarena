@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Column,
+  CreateDateColumn, // Added this import
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Challenge } from '../challenges/challenge.entity';
@@ -24,8 +25,6 @@ export class Participant {
   @Column({ default: 0 })
   score: number;
 
-  // 🔥 ANTI-CHEAT FIELDS (NEW)
-
   @Column({ default: 100 })
   activityScore: number;
 
@@ -46,4 +45,7 @@ export class Participant {
 
   @Column({ default: 0 })
   disconnectCount: number;
+
+  @CreateDateColumn()
+  created_at: Date;
 }
