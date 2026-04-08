@@ -1,157 +1,3 @@
-// import { Users, Timer, Coins, Play, XCircle, LogIn, Crown } from "lucide-react";
-// import axios from "../api/axios";
-// import toast from "react-hot-toast";
-// import { useState } from "react";
-
-// export default function ChallengeCard({ challenge, refresh, onDelete }) {
-//   const [loading, setLoading] = useState(false);
-
-//   // Get Current User ID from token
-//   const token = localStorage.getItem("token");
-//   const currentUserId = token ? JSON.parse(atob(token.split(".")[1])).userId : null;
-
-//   // Logic Helpers
-//   const participants = challenge.participants || [];
-//   const creator = participants[0]?.user;
-//   const isCreator = creator?.id === currentUserId;
-//   const isJoined = participants.some((p) => p.user.id === currentUserId);
-//   const isPending = challenge.status === "pending";
-
-//   const handleJoin = async () => {
-//     try {
-//       setLoading(true);
-//       await axios.post(`/challenges/${challenge.id}/join`);
-//       toast.success("Joined Arena!");
-//       refresh();
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Join failed");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleStart = async () => {
-//     try {
-//       setLoading(true);
-//       await axios.patch(`/challenges/${challenge.id}/start`);
-//       toast.success("Battle Started!");
-//       refresh();
-//     } catch (err) {
-//       toast.error("Only creator can start.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleKick = async (participantId) => {
-//     try {
-//       await axios.delete(`/challenges/${challenge.id}/participants/${participantId}`);
-//       toast.success("User removed and refunded.");
-//       refresh();
-//     } catch (err) {
-//       toast.error("Failed to remove user.");
-//     }
-//   };
-
-//   return (
-//     <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:border-blue-500/50 transition-all flex flex-col h-full backdrop-blur-md">
-//       {/* Header */}
-//       <div className="flex justify-between items-start mb-4">
-//         <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
-//           {challenge.type} arena
-//         </div>
-//         {isCreator && isPending && (
-//           <button onClick={() => onDelete(challenge.id)} className="text-gray-500 hover:text-red-400 transition">
-//             <XCircle size={18} />
-//           </button>
-//         )}
-//       </div>
-
-//       <h3 className="text-xl font-bold mb-4 line-clamp-1">{challenge.title}</h3>
-
-//       {/* Stats */}
-//       <div className="grid grid-cols-2 gap-3 mb-6">
-//         <div className="bg-black/20 p-3 rounded-2xl border border-white/5">
-//           <div className="flex items-center gap-2 text-gray-400 text-[10px] uppercase font-bold mb-1">
-//             <Coins size={12} className="text-yellow-500" /> Stake
-//           </div>
-//           <div className="font-bold text-lg">{challenge.stake}</div>
-//         </div>
-//         <div className="bg-black/20 p-3 rounded-2xl border border-white/5">
-//           <div className="flex items-center gap-2 text-gray-400 text-[10px] uppercase font-bold mb-1">
-//             <Timer size={12} className="text-blue-400" /> Time
-//           </div>
-//           <div className="font-bold text-lg">{challenge.duration_minutes}m</div>
-//         </div>
-//       </div>
-
-//       {/* Participant List (The "Lobby") */}
-//       <div className="mb-6 flex-grow">
-//         <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest mb-3 flex items-center gap-2">
-//           <Users size={12} /> Lobby ({participants.length})
-//         </p>
-//         <div className="space-y-2">
-//           {participants.map((p, idx) => (
-//             <div key={p.id} className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/5">
-//               <div className="flex items-center gap-2">
-//                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
-//                   {p.user.name.charAt(0)}
-//                 </div>
-//                 <span className="text-sm font-medium truncate max-w-[100px]">{p.user.name}</span>
-//                 {idx === 0 && <Crown size={12} className="text-yellow-500" />}
-//               </div>
-              
-//               {/* Kick authority for Creator */}
-//               {isCreator && idx !== 0 && isPending && (
-//                 <button 
-//                   onClick={() => handleKick(p.id)}
-//                   className="text-gray-500 hover:text-red-500 transition px-2"
-//                   title="Reject Request"
-//                 >
-//                   <XCircle size={14} />
-//                 </button>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* Actions */}
-//       <div className="mt-auto">
-//         {isPending ? (
-//           isCreator ? (
-//             <button
-//               onClick={handleStart}
-//               disabled={loading || (challenge.type === 'group' && participants.length < 2)}
-//               className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 transition font-black uppercase text-sm flex items-center justify-center gap-2 shadow-xl shadow-blue-900/20"
-//             >
-//               <Play size={16} fill="currentColor" />
-//               {participants.length < 2 && challenge.type === 'group' ? "Waiting for Opponents" : "Start Battle"}
-//             </button>
-//           ) : isJoined ? (
-//             <div className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 text-center text-sm font-bold animate-pulse">
-//               Waiting for Host...
-//             </div>
-//           ) : (
-//             <button
-//               onClick={handleJoin}
-//               disabled={loading}
-//               className="w-full py-4 rounded-2xl bg-green-600 hover:bg-green-500 transition font-black uppercase text-sm flex items-center justify-center gap-2 shadow-xl shadow-green-900/20"
-//             >
-//               <LogIn size={16} />
-//               Join Arena
-//             </button>
-//           )
-//         ) : (
-//           <div className="w-full py-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 text-center text-sm font-black uppercase tracking-widest">
-//             {challenge.status}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 import { Users, Timer, Coins, Play, XCircle, LogIn, Crown, Rocket, CheckCircle, AlertTriangle, Trash2, X } from "lucide-react";
 import axios from "../api/axios";
 import toast from "react-hot-toast";
@@ -193,21 +39,23 @@ export default function ChallengeCard({ challenge, refresh, onDelete }) {
       setLoading(false);
     }
   };
-
-  const handleKick = async (participantId) => {
-    if (!window.confirm("Remove this player from the arena?")) return;
-    try {
-      setLoading(true);
-      // Endpoint assumes backend logic for removing a participant
-      await axios.post(`/challenges/${challenge.id}/kick/${participantId}`);
-      toast.success("Participant removed");
-      refresh();
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to kick player");
-    } finally {
-      setLoading(false);
-    }
-  };
+// Inside ChallengeCard.jsx
+const handleKick = async (participantId) => {
+  if (!window.confirm("Remove this player from the arena?")) return;
+  try {
+    setLoading(true);
+    
+    // 🔥 FIXED: Changed method to DELETE and updated path to match the backend route
+    await axios.delete(`/challenges/${challenge.id}/participants/${participantId}`);
+    
+    toast.success("Participant removed and refunded");
+    refresh();
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to kick player");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleStart = async () => {
     try {
