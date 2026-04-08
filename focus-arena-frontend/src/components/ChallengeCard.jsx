@@ -152,7 +152,7 @@
 //   );
 // }
 
-import { Users, Timer, Coins, Play, XCircle, LogIn, Crown, Rocket, CheckCircle, AlertTriangle, Trash2 } from "lucide-react";
+import { Users, Timer, Coins, Play, XCircle, LogIn, Crown, Rocket, CheckCircle, AlertTriangle, Trash2, X } from "lucide-react";
 import axios from "../api/axios";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
@@ -169,8 +169,8 @@ export default function ChallengeCard({ challenge, refresh, onDelete }) {
   
   // Logic Fix: Ensure creator check is robust
   const creator = participants[0]?.user;
-  const isCreator = creator?.id === currentUserId;
-  const isJoined = participants.some((p) => p.user?.id === currentUserId);
+  const isCreator = String(creator?.id) === String(currentUserId);
+  const isJoined = participants.some((p) => String(p.user?.id) === String(currentUserId));
   
   // Logic Fix: Only Launch if participants > 1 for Group, or always for Solo
   const canLaunch = challenge.type === 'solo' || participants.length > 1;
@@ -189,6 +189,21 @@ export default function ChallengeCard({ challenge, refresh, onDelete }) {
       refresh();
     } catch (err) {
       toast.error(err.response?.data?.message || "Join failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKick = async (participantId) => {
+    if (!window.confirm("Remove this player from the arena?")) return;
+    try {
+      setLoading(true);
+      // Endpoint assumes backend logic for removing a participant
+      await axios.post(`/challenges/${challenge.id}/kick/${participantId}`);
+      toast.success("Participant removed");
+      refresh();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to kick player");
     } finally {
       setLoading(false);
     }
@@ -250,10 +265,22 @@ export default function ChallengeCard({ challenge, refresh, onDelete }) {
       <div className="mb-8 flex-grow">
         <div className="space-y-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
           {participants.map((p, idx) => (
-            <div key={p.id} className="flex items-center gap-3 bg-white/5 p-3 rounded-2xl border border-white/5">
+            <div key={p.id} className="flex items-center gap-3 bg-white/5 p-3 rounded-2xl border border-white/5 group/player">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-[10px] font-black shadow-lg uppercase">{p.user?.name?.charAt(0) || '?'}</div>
                 <span className="text-[11px] font-black uppercase tracking-tight truncate flex-1">{p.user?.name || 'Unknown User'}</span>
+                
+                {/* Crown for Creator */}
                 {idx === 0 && <Crown size={14} className="text-yellow-500" />}
+
+                {/* Kick button: Only for Host, and cannot kick self */}
+                {isCreator && String(p.user?.id) !== String(currentUserId) && challenge.status === 'pending' && (
+                  <button 
+                    onClick={() => handleKick(p.user.id)}
+                    className="opacity-0 group-hover/player:opacity-100 p-1 hover:bg-red-500/20 text-red-400 rounded transition-all"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
             </div>
           ))}
         </div>
