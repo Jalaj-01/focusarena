@@ -13,7 +13,7 @@ async function bootstrap() {
 
   // ✅ CORS (Must be before helmet)
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: ['https://focusarena-pi.vercel.app', 'http://localhost:5173'],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   });
@@ -24,16 +24,6 @@ async function bootstrap() {
       crossOriginResourcePolicy: false,
     }),
   );
-
-  // ❌ REMOVED RATE LIMITER TO FIX 429 ERROR
-  /*
-  app.use(
-    rateLimit({
-      windowMs: 60 * 1000,
-      max: 100,
-    }),
-  );
-  */
 
   await app.listen(process.env.PORT ?? 3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
