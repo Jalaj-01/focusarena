@@ -1,19 +1,25 @@
-import { Controller, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { UsersService } from './users.service';
+import { Request } from 'express';
+
+// ✅ Define proper type for req.user
+interface AuthRequest extends Request {
+  user: {
+    userId: string;
+    email: string;
+  };
+}
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // 🔐 USER PROFILE
+  // 🔐 USER PROFILE (FIXED + TYPED)
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return {
-      message: 'Protected route accessed',
-      user: req.user,
-    };
+  async getProfile(@Req() req: AuthRequest) {
+    return this.usersService.getProfile(req.user.userId);
   }
 
   // 🏆 LEADERBOARD (PUBLIC)

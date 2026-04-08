@@ -1,4 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 import { Challenge } from '../challenges/challenge.entity';
 
@@ -10,7 +15,7 @@ export class Participant {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToOne(() => Challenge)
+  @ManyToOne(() => Challenge, (challenge) => challenge.participants)
   challenge: Challenge;
 
   @Column({ default: false })
@@ -18,4 +23,27 @@ export class Participant {
 
   @Column({ default: 0 })
   score: number;
+
+  // 🔥 ANTI-CHEAT FIELDS (NEW)
+
+  @Column({ default: 100 })
+  activityScore: number;
+
+  @Column({ default: 0 })
+  totalActiveTime: number; // in seconds
+
+  @Column({ default: 0 })
+  totalInactiveTime: number; // in seconds
+
+  @Column({ type: 'timestamp', nullable: true })
+  lastActiveAt: Date;
+
+  @Column({ default: 0 })
+  warnings: number;
+
+  @Column({ default: false })
+  disqualified: boolean;
+
+  @Column({ default: 0 })
+  disconnectCount: number;
 }

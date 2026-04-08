@@ -33,7 +33,6 @@ export class UsersService {
   async getProfile(userId: string) {
     return this.userRepo.findOne({
       where: { id: userId },
-      relations: ['userBadges', 'userBadges.badge'],
     });
-  }
+}
 }

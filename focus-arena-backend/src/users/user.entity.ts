@@ -51,4 +51,7 @@ export class User {
 
   @Column({ nullable: true })
   completed_by: string;
+
+  @Column({ default: 'user' })
+  role: 'user' | 'admin';
 }

@@ -9,9 +9,13 @@ import { RewardsModule } from './rewards/rewards.module';
 import { RealtimeModule } from './realtime/realtime.module';
 import { FriendsModule } from './friends/friends.module';
 import { UploadsModule } from './uploads/uploads.module';
+// import { AdminController } from './admin/admin.controller';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -41,7 +45,8 @@ import { UploadsModule } from './uploads/uploads.module';
 
     FriendsModule,
 
-    UploadsModule, // 👈 only this module needed here
+    UploadsModule,
   ],
+  // controllers: [AdminController],
 })
 export class AppModule {}

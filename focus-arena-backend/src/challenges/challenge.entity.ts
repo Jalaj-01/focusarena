@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Participant } from '../participants/participant.entity';
 
 @Entity()
 export class Challenge {
@@ -23,7 +25,7 @@ export class Challenge {
   duration_minutes: number;
 
   @Column({ default: 'pending' })
-  status: 'pending' | 'active' | 'completed';
+  status: 'pending' | 'active' | 'completed' | 'failed';
 
   @Column({ default: false })
   is_archived: boolean;
@@ -46,4 +48,7 @@ export class Challenge {
   @CreateDateColumn()
   created_at: Date;
 
+  // 🔥 IMPORTANT FIX (ADD THIS)
+  @OneToMany(() => Participant, (participant) => participant.challenge)
+  participants: Participant[];
 }

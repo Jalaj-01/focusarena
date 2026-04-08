@@ -1,13 +1,27 @@
-export const matchmakingQueue: any[] = [];
+type QueueUser = {
+  userId: string;
+  level: number;
+  stake: number;
+  type: string;
+};
 
-export function addToQueue(user: any, prefs: any) {
-  matchmakingQueue.push({ user, prefs });
+export const matchmakingQueue: QueueUser[] = [];
+
+export function addToQueue(user: QueueUser) {
+  matchmakingQueue.push(user);
 }
 
-export function findMatch(user: any) {
+export function removeFromQueue(userId: string) {
+  const index = matchmakingQueue.findIndex(u => u.userId === userId);
+  if (index !== -1) matchmakingQueue.splice(index, 1);
+}
+
+export function findMatch(user: QueueUser) {
   return matchmakingQueue.find(
-    (q) =>
-      q.user.id !== user.id &&
-      Math.abs(q.user.level - user.level) <= 2,
+    (u) =>
+      u.userId !== user.userId &&
+      u.type === user.type &&
+      u.stake === user.stake &&
+      Math.abs(u.level - user.level) <= 2,
   );
 }
