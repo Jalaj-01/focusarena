@@ -1,10 +1,10 @@
-# ⚔️ FocusArena ⚔️
+# FocusArena 
 
 Turn your focus sessions into a competitive battleground. **FocusArena** is a gamified productivity application that helps users stay accountable, compete with others in real-time, earn experience points (XP) and coins, buy rewards/badges, and build unstoppable daily habits.
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - ⏱️ **Gamified Focus Sessions**: Start solo or group focus timers where your coins are staked as a commitment.
 - 🤝 **Real-Time Matchmaking**: Find focus partners or challenge opponents to real-time "focus battles" via WebSockets.
@@ -62,7 +62,7 @@ FocusArena/
 
 ---
 
-## ⚙️ Local Development Setup
+##  Local Development Setup
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18+)
@@ -127,7 +127,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Jalaj-01/focusarena/issues).
 
