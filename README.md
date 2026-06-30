@@ -132,9 +132,3 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Jalaj-01/focusarena/issues).
 
 ---
-
-## 📝 License
-
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
-
-Built with ❤️ by [Jalaj](https://github.com/Jalaj-01) 🚀
